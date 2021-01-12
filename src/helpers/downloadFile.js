@@ -32,19 +32,17 @@ function download(url, path, cb, passThrough) {
                         file.write(chunk);
                         downloaded += chunk.length;
                         percent = (100.0 * downloaded / len).toFixed(2);
-                        console.log(downloaded + ' ' + percent);
                         if(typeof cb === 'function')
                             cb(downloaded, percent, passThrough);
                     })
                     .on('end', function() {
                         file.end();
-                        console.log(`${uri.path} downloaded to: ${path}`);
                         resolve();
                     })
                     .on('error', function (err) {
                         reject(err);
                     });
-            } else if (res.statusCode === 302 || res.statusCode === 301 || res.statusCode === 303) {
+            } else if ([301, 302, 303].includes(res.statusCode)) {
                 //Recursively follow redirects, only a 200 will resolve.
                 download(res.headers.location, path, cb, passThrough).then(() => resolve());
             } else {
