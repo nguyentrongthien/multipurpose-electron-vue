@@ -1,6 +1,6 @@
 'use strict';
 
-import {app, protocol, BrowserWindow,} from 'electron';
+import {app, protocol, BrowserWindow, ipcMain,} from 'electron';
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 
@@ -83,4 +83,12 @@ if (isDevelopment) {
     }
 }
 
-require('./components/file_browser/background');
+// Load list of commands for ipcMain
+
+const funcArr = {
+    ...require('./components/file_browser/background').default,
+};
+
+ipcMain.on("renderer-process-request", (event, type, payload) => {
+    funcArr[payload.flag](event, type, payload);
+});
