@@ -1,4 +1,5 @@
-# test-electron-app
+# multipurpose-electron-vue
+An electron vue app where I explore the capabilities of Electron on Windows (and possibly other OSes)
 
 ## Project setup
 ```
